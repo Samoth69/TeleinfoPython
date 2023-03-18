@@ -8,7 +8,7 @@ from Parser import Parser
 
 
 def on_log(client, userdata, level, buff):
-    logging.info(level, buff)
+    logging.info("level:", str(level), " buff:", str(buff))
 
 
 if __name__ == "__main__":

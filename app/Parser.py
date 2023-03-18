@@ -31,15 +31,16 @@ class Parser:
         logging.debug("get frame start")
         raw = self._get_raw_frame()
         try:
-            groups = [line.split(" ", 2) for line in raw.split(self.MARKER_END_LINE)]
+            groups = [line.lstrip(self.MARKER_START_LINE).split(" ", 2) for line in raw.split(self.MARKER_END_LINE)]
             groups.pop()  # enlève le \x03 qui représente la fin de la trame
             logger.debug(groups)
             frame = {}
             for line in groups:
                 try:
-                    ret = self._process_line(line)
-                    if ret is not None:
-                        frame[ret[0]] = ret[1]
+                    if self._checksum(line[0], line[1]) == line[2]:
+                        frame[line[0]] = line[1]
+                    else:
+                        logger.warning(f"Invalid checksum for {line[0]}")
                 except Exception as e:
                     logger.error(f"processing line {line} failed: ", e)
         except Exception as e:
@@ -47,15 +48,6 @@ class Parser:
             frame = {}
         logging.debug("get frame done")
         return frame
-
-    def _process_line(self, line: str) -> Optional[List]:
-        line = line.lstrip(self.MARKER_START_LINE).rstrip(self.MARKER_END_LINE)
-        group = line.split(" ", 2)
-        if group[2] == self._checksum(group[0], group[1]):
-            return group
-        else:
-            logger.error("Checksum error on field ", group[0])
-        return None
 
     def _synchro_debut_trame(self):
         logging.debug("synchro début trame")

@@ -1,3 +1,5 @@
+from typing import List, Optional
+
 import serial
 import itertools
 import logging
@@ -30,19 +32,30 @@ class Parser:
         raw = self._get_raw_frame()
         try:
             groups = [line.split(" ", 2) for line in raw.split(self.MARKER_END_LINE)]
+            groups.pop()  # enlève le \x03 qui représente la fin de la trame
             logger.debug(groups)
-            frame = dict([
-                (k, v) for k, v, chksum in groups if chksum == self._checksum(k, v)
-            ])
-            if len(frame) != len(groups):
-                logger.info("Discarded fields because of bad checksum: {}".format(
-                    [f for f in itertools.filterfalse(lambda g: g[2] == self._checksum(g[0], g[1]), groups)]
-                ))
+            frame = {}
+            for line in groups:
+                try:
+                    ret = self._process_line(line)
+                    if ret is not None:
+                        frame[ret[0]] = ret[1]
+                except Exception as e:
+                    logger.error(f"processing line {line} failed: ", e)
         except Exception as e:
-            logger.error("Caught exception while parsing teleinfo frame: {}".format(e))
+            logger.error("Caught exception while parsing teleinfo frame: ", e)
             frame = {}
         logging.debug("get frame done")
         return frame
+
+    def _process_line(self, line: str) -> Optional[List]:
+        line = line.lstrip(self.MARKER_START_LINE).rstrip(self.MARKER_END_LINE)
+        group = line.split(" ", 2)
+        if group[2] == self._checksum(group[0], group[1]):
+            return group
+        else:
+            logger.error("Checksum error on field ", group[0])
+        return None
 
     def _synchro_debut_trame(self):
         logging.debug("synchro début trame")

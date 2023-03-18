@@ -19,15 +19,14 @@ if __name__ == "__main__":
     ti = Parser()
     client = mqtt.Client("teleinfo")
 
-    client.enable_logger()
-    client.on_log = on_log
+    # client.enable_logger()
+    # client.on_log = on_log
     client.username_pw_set(os.environ.get("MQTT_USER", None), os.environ.get("MQTT_PASSWORD", None))
 
     client.connect("192.168.0.7")
     client.loop_start()
     # print(json.dumps(ti.get_frame(), indent=2, separators=(',', ':')))
     while True:
-        logging.info("ping")
         dic = ti.get_frame()
         dic["_time"] = int(time.time())  # epoch
         client.publish("homeassistant/sensor/teleinfo/linky", payload=json.dumps(dic), retain=True)

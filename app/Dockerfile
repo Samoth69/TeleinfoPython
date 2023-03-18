@@ -4,4 +4,4 @@ COPY . /app
 
 RUN pip install pyserial
 
-ENTRYPOINT ["python", "/app/Main.py"]
+CMD ["python", "/app/Main.py"]

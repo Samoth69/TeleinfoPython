@@ -1,0 +1,9 @@
+version: "3.3"
+
+services:
+  teleinfo:
+    build: ./app
+    container_name: teleinfo
+    restart: unless-stopped
+    devices:
+      - "/dev/ttyACM0:/dev/ttyACM0"

@@ -9,8 +9,8 @@ logger = logging.getLogger(__name__)
 class Parser:
     MARKER_START_FRAME = b'\x02'
     MARKER_STOP_FRAME = b'\x03'
-    MARKER_START_LINE = chr(10)  # LF
-    MARKER_END_LINE = chr(13)  # CR
+    MARKER_START_LINE = chr(10)  # LF (\n)
+    MARKER_END_LINE = chr(13)  # CR (\r)
 
     def __init__(self):
         self._serial_port = serial.Serial(
@@ -27,9 +27,10 @@ class Parser:
 
     def get_frame(self):
         logging.debug("get frame start")
-        raw = self._get_raw_frame().strip(self.MARKER_END_LINE)
+        raw = self._get_raw_frame()
         try:
-            groups = [line.split(" ", 2) for line in raw.lstrip(self.MARKER_START_LINE).rsplit(self.MARKER_END_LINE)]
+            logger.debug(raw)
+            groups = [line.split(" ", 2) for line in raw]
             groups.pop()  # enlève le \x03 qui représente la fin de la trame
             logger.debug(groups)
             frame = dict([

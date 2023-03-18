@@ -5,8 +5,8 @@ import paho.mqtt.client as mqtt
 from Parser import Parser
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-    logging.info("test")
+    logging.basicConfig(level=logging.INFO)
+    logging.info("starting")
 
     ti = Parser()
     client = mqtt.Client("teleinfo", clean_session=False)

@@ -7,8 +7,8 @@ logger = logging.getLogger(__name__)
 
 # https://github.com/hallard/python-teleinfo/blob/master/teleinfo/parser.py
 class Parser:
-    MARKER_START_FRAME = chr(2)
-    MARKER_STOP_FRAME = chr(3)
+    MARKER_START_FRAME = b'\x02'
+    MARKER_STOP_FRAME = b'\x03'
     MARKER_END_LINE = '\r\n'
 
     def __init__(self, hw=None):
@@ -52,7 +52,7 @@ class Parser:
             self._hw)
         )
         logging.debug("get raw frame done")
-        return frame
+        return str(frame)
 
     def _checksum(self, key, value):
         chksum = 32

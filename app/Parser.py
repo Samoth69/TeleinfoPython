@@ -21,6 +21,7 @@ class Parser:
             parity=serial.PARITY_EVEN,
             stopbits=serial.STOPBITS_ONE,
             bytesize=serial.SEVENBITS)
+        self._synchro_debut_trame()
 
     def __iter__(self):
         while True:

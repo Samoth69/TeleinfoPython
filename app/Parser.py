@@ -1,4 +1,4 @@
-from BaseVendor import BaseVendor
+import serial
 import itertools
 import logging
 
@@ -11,9 +11,13 @@ class Parser:
     MARKER_STOP_FRAME = b'\x03'
     MARKER_END_LINE = '\r\n'
 
-    def __init__(self, hw=None):
-        assert hw is not None and isinstance(hw, BaseVendor)
-        self._hw = hw
+    def __init__(self):
+        self._serial_port = serial.Serial(
+            port="/dev/ttyACM0",
+            baudrate=1200,
+            parity=serial.PARITY_EVEN,
+            stopbits=serial.STOPBITS_ONE,
+            bytesize=serial.SEVENBITS)
         self._synchro_debut_trame()
 
     def __iter__(self):
@@ -40,17 +44,14 @@ class Parser:
 
     def _synchro_debut_trame(self):
         logging.debug("synchro début trame")
-        while self._hw.read_char() != self.MARKER_START_FRAME:
+        while self._serial_port.read(1) != self.MARKER_START_FRAME:
             pass
         logging.debug("synchro début trame done")
 
     def _get_raw_frame(self):
         logging.debug("get raw frame start")
         self._synchro_debut_trame()
-        frame = ''.join(itertools.takewhile(
-            lambda c: c != self.MARKER_STOP_FRAME,
-            self._hw)
-        )
+        frame = self._serial_port.read_until(self.MARKER_STOP_FRAME)
         logging.debug("get raw frame done")
         return str(frame)
 

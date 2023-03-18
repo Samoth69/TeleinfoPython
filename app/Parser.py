@@ -9,7 +9,8 @@ logger = logging.getLogger(__name__)
 class Parser:
     MARKER_START_FRAME = b'\x02'
     MARKER_STOP_FRAME = b'\x03'
-    MARKER_END_LINE = '\r\n'
+    MARKER_START_LINE = b'\x0A'  # LF
+    MARKER_END_LINE = b'\x0D'  # CR
 
     def __init__(self):
         self._serial_port = serial.Serial(
@@ -28,7 +29,7 @@ class Parser:
         logging.debug("get frame start")
         raw = self._get_raw_frame().strip(self.MARKER_END_LINE)
         try:
-            groups = [line.split(" ", 2) for line in raw.split(self.MARKER_END_LINE)]
+            groups = [line.split(" ", 2) for line in raw.lstrip(self.MARKER_START_LINE).rsplit(self.MARKER_END_LINE)]
             logger.debug(groups)
             frame = dict([
                 (k, v) for k, v, chksum in groups if chksum == self._checksum(k, v)

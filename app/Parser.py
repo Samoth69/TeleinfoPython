@@ -9,8 +9,8 @@ logger = logging.getLogger(__name__)
 class Parser:
     MARKER_START_FRAME = b'\x02'
     MARKER_STOP_FRAME = b'\x03'
-    MARKER_START_LINE = b'\x0A'  # LF
-    MARKER_END_LINE = b'\x0D'  # CR
+    MARKER_START_LINE = chr(10)  # LF
+    MARKER_END_LINE = chr(13)  # CR
 
     def __init__(self):
         self._serial_port = serial.Serial(

@@ -21,7 +21,6 @@ class Parser:
             parity=serial.PARITY_EVEN,
             stopbits=serial.STOPBITS_ONE,
             bytesize=serial.SEVENBITS)
-        self._synchro_debut_trame()
 
     def __iter__(self):
         while True:
@@ -38,7 +37,13 @@ class Parser:
             for line in groups:
                 try:
                     if self._checksum(line[0], line[1]) == line[2]:
-                        frame[line[0]] = line[1]
+                        # on essaye de cast la valeur en int, si ça plante
+                        # écrit la valeur sans traitement
+                        try:
+                            cast = int(line[1])
+                            frame[line[0]] = cast
+                        except ValueError:
+                            frame[line[0]] = line[1]
                     else:
                         logger.warning(f"Invalid checksum for {line[0]}")
                 except Exception as e:

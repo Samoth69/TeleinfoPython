@@ -13,6 +13,7 @@ if __name__ == "__main__":
     ti = Parser()
     client = mqtt.Client("teleinfo", clean_session=False)
     client.connect("192.168.0.7")
+    client.loop_start()
     # print(json.dumps(ti.get_frame(), indent=2, separators=(',', ':')))
     while True:
         dic = ti.get_frame()

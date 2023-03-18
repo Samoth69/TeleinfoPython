@@ -29,6 +29,7 @@ class Parser:
         raw = self._get_raw_frame().strip(self.MARKER_END_LINE)
         try:
             groups = [line.split(" ", 2) for line in raw.split(self.MARKER_END_LINE)]
+            logger.debug(groups)
             frame = dict([
                 (k, v) for k, v, chksum in groups if chksum == self._checksum(k, v)
             ])

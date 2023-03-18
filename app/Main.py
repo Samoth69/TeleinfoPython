@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import time
 
 import paho.mqtt.client as mqtt
@@ -17,8 +18,11 @@ if __name__ == "__main__":
 
     ti = Parser()
     client = mqtt.Client("teleinfo")
+
     client.enable_logger()
     client.on_log = on_log
+    client.username_pw_set(os.environ.get("MQTT_USER", None), os.environ.get("MQTT_PASSWORD", None))
+
     client.connect("192.168.0.7")
     client.loop_start()
     # print(json.dumps(ti.get_frame(), indent=2, separators=(',', ':')))

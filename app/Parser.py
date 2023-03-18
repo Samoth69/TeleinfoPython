@@ -34,7 +34,7 @@ class Parser:
             ])
             if len(frame) != len(groups):
                 logger.info("Discarded fields because of bad checksum: {}".format(
-                    [f for f in itertools.ifilterfalse(lambda g: g[2] == self._checksum(g[0], g[1]), groups)]
+                    [f for f in itertools.filterfalse(lambda g: g[2] == self._checksum(g[0], g[1]), groups)]
                 ))
         except Exception as e:
             logger.error("Caught exception while parsing teleinfo frame: {}".format(e))

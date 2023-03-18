@@ -30,6 +30,7 @@ class Parser:
         raw = self._get_raw_frame().strip(self.MARKER_END_LINE)
         try:
             groups = [line.split(" ", 2) for line in raw.lstrip(self.MARKER_START_LINE).rsplit(self.MARKER_END_LINE)]
+            groups.pop()  # enlève le \x03 qui représente la fin de la trame
             logger.debug(groups)
             frame = dict([
                 (k, v) for k, v, chksum in groups if chksum == self._checksum(k, v)

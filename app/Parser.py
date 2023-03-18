@@ -54,7 +54,7 @@ class Parser:
         self._synchro_debut_trame()
         frame = self._serial_port.read_until(self.MARKER_STOP_FRAME)
         logging.debug("get raw frame done")
-        return str(frame)
+        return frame.decode(encoding="ascii")
 
     def _checksum(self, key, value):
         chksum = 32

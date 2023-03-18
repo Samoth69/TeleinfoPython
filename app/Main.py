@@ -14,4 +14,4 @@ if __name__ == "__main__":
     # print(json.dumps(ti.get_frame(), indent=2, separators=(',', ':')))
     while True:
         data = json.dumps(ti.get_frame())
-        client.publish("teleinfo", payload=data, retain=True)
+        client.publish("homeassistant/sensor/teleinfo/linky", payload=data, retain=True)

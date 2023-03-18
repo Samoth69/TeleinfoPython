@@ -5,6 +5,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+# https://github.com/hallard/python-teleinfo/blob/master/teleinfo/parser.py
 class Parser:
     MARKER_START_FRAME = chr(2)
     MARKER_STOP_FRAME = chr(3)

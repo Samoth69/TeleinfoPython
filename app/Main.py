@@ -11,7 +11,8 @@ if __name__ == "__main__":
     logging.info("starting")
 
     ti = Parser()
-    client = mqtt.Client("teleinfo", clean_session=False)
+    client = mqtt.Client("teleinfo")
+    client.enable_logger()
     client.connect("192.168.0.7")
     client.loop_start()
     # print(json.dumps(ti.get_frame(), indent=2, separators=(',', ':')))

@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-from .BaseVendor import BaseVendor
+from BaseVendor import BaseVendor
 import itertools
 import logging
 

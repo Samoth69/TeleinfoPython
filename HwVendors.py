@@ -1,9 +1,7 @@
-#!/usr/bin/env python
-
 import serial
 import time
 import os
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 from BaseVendor import BaseVendor
 
 

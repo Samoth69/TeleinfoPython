@@ -7,3 +7,5 @@ services:
     restart: unless-stopped
     devices:
       - /dev/ttyACM0:/dev/ttyACM0
+    env_file:
+      - env

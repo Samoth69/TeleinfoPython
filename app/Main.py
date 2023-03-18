@@ -5,7 +5,7 @@ import HwVendors
 from Parser import Parser
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
     logging.info("test")
 
     ti = Parser(HwVendors.Teleinfo3())

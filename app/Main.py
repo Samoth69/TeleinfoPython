@@ -23,7 +23,7 @@ if __name__ == "__main__":
     # client.on_log = on_log
     client.username_pw_set(os.environ.get("MQTT_USER", None), os.environ.get("MQTT_PASSWORD", None))
 
-    client.connect("192.168.0.7")
+    client.connect("192.168.0.31")
     client.loop_start()
     # print(json.dumps(ti.get_frame(), indent=2, separators=(',', ':')))
     while True:
